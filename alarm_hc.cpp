@@ -2,29 +2,35 @@
 
 Alarm_HC::Alarm_HC(QWidget *parent)
 {
-  this->parent = parent;
-  QLibrary HCDLL("HCNetSDK.dll");
-  if(HCDLL.load())
-  {
-     QMessageBox::information(this->parent,"error","报警主机DLL加载失败！" + HCDLL.errorString() );
-  }
-  else
-  {
-      fun_NET_DVR_Init  = (NET_DVR_Init)HCDLL.resolve("NET_DVR_Init");
-      fun_NET_DVR_Cleanup  = (NET_DVR_Cleanup)HCDLL.resolve("NET_DVR_Cleanup");
-      fun_NET_DVR_SetReconnect  = (NET_DVR_SetReconnect)HCDLL.resolve("NET_DVR_SetReconnect");
-      fun_NET_DVR_SetConnectTime  = (NET_DVR_SetConnectTime)HCDLL.resolve("NET_DVR_SetConnectTime");
-      fun_NET_DVR_Login_V30  = (NET_DVR_Login_V30)HCDLL.resolve("NET_DVR_Login_V30");
-      fun_NET_DVR_SetDVRMessageCallBack_V30  = (NET_DVR_SetDVRMessageCallBack_V30)HCDLL.resolve("NET_DVR_SetDVRMessageCallBack_V30");
-      fun_NET_DVR_StartListen_V30  = (NET_DVR_StartListen_V30)HCDLL.resolve("NET_DVR_StartListen_V30");
-      fun_NET_DVR_Logout_V30  = (NET_DVR_Logout_V30)HCDLL.resolve("NET_DVR_Logout_V30");
-      fun_NET_DVR_StopListen_V30  = (NET_DVR_StopListen_V30)HCDLL.resolve("NET_DVR_StopListen_V30");
-  }
-
+    this->parent = parent;
+    IsLoad = false ;
+    QLibrary HCDLL("HCNetSDK.dll");
+    if(HCDLL.load())
+    {
+        QMessageBox::information(this->parent,"error","报警主机DLL加载失败！" + HCDLL.errorString() );
+    }
+    else
+    {
+        fun_NET_DVR_Init  = (NET_DVR_Init)HCDLL.resolve("NET_DVR_Init");
+        fun_NET_DVR_Cleanup  = (NET_DVR_Cleanup)HCDLL.resolve("NET_DVR_Cleanup");
+        fun_NET_DVR_SetReconnect  = (NET_DVR_SetReconnect)HCDLL.resolve("NET_DVR_SetReconnect");
+        fun_NET_DVR_SetConnectTime  = (NET_DVR_SetConnectTime)HCDLL.resolve("NET_DVR_SetConnectTime");
+        fun_NET_DVR_Login_V30  = (NET_DVR_Login_V30)HCDLL.resolve("NET_DVR_Login_V30");
+        fun_NET_DVR_SetDVRMessageCallBack_V30  = (NET_DVR_SetDVRMessageCallBack_V30)HCDLL.resolve("NET_DVR_SetDVRMessageCallBack_V30");
+        fun_NET_DVR_StartListen_V30  = (NET_DVR_StartListen_V30)HCDLL.resolve("NET_DVR_StartListen_V30");
+        fun_NET_DVR_Logout_V30  = (NET_DVR_Logout_V30)HCDLL.resolve("NET_DVR_Logout_V30");
+        fun_NET_DVR_StopListen_V30  = (NET_DVR_StopListen_V30)HCDLL.resolve("NET_DVR_StopListen_V30");
+        IsLoad = true ;
+    }
 }
 
 bool Alarm_HC::M_NET_DVR_Init()
 {
+    if (IsLoad)
+    {
+        return false;
+    }
+
     if(fun_NET_DVR_Init)
     {
         return fun_NET_DVR_Init();
@@ -37,6 +43,10 @@ bool Alarm_HC::M_NET_DVR_Init()
 
 bool Alarm_HC::M_NET_DVR_Cleanup()
 {
+    if (IsLoad)
+    {
+        return false;
+    }
     if(fun_NET_DVR_Cleanup)
     {
         return fun_NET_DVR_Cleanup();
@@ -49,6 +59,10 @@ bool Alarm_HC::M_NET_DVR_Cleanup()
 
 bool Alarm_HC::M_NET_DVR_SetConnectTime(DWORD dwWaitTime, DWORD dwTryTimes)
 {
+    if (IsLoad)
+    {
+        return false;
+    }
 
     if(fun_NET_DVR_SetConnectTime)
     {
@@ -62,6 +76,10 @@ bool Alarm_HC::M_NET_DVR_SetConnectTime(DWORD dwWaitTime, DWORD dwTryTimes)
 
 bool Alarm_HC::M_NET_DVR_SetReconnect(DWORD dwInterval, WINBOOL bEnableRecon)
 {
+    if (IsLoad)
+    {
+        return false;
+    }
 
     if(fun_NET_DVR_SetReconnect)
     {
@@ -75,6 +93,10 @@ bool Alarm_HC::M_NET_DVR_SetReconnect(DWORD dwInterval, WINBOOL bEnableRecon)
 
 long Alarm_HC::M_NET_DVR_Login_V30(char *sDVRIP, WORD wDVRPort, char *sUserName, char *sPassword, LPNET_DVR_DEVICEINFO_V30 lpDeviceInfo)
 {
+    if (IsLoad)
+    {
+        return -1;
+    }
 
     if(fun_NET_DVR_Login_V30)
     {
@@ -88,6 +110,10 @@ long Alarm_HC::M_NET_DVR_Login_V30(char *sDVRIP, WORD wDVRPort, char *sUserName,
 
 bool Alarm_HC::M_NET_DVR_SetDVRMessageCallBack_V30(MSGCallBack fMessageCallBack, void *pUser)
 {
+    if (IsLoad)
+    {
+        return false;
+    }
 
     if(fun_NET_DVR_SetDVRMessageCallBack_V30)
     {
@@ -101,6 +127,10 @@ bool Alarm_HC::M_NET_DVR_SetDVRMessageCallBack_V30(MSGCallBack fMessageCallBack,
 
 long Alarm_HC::M_NET_DVR_StartListen_V30(char *sLocalIP, WORD wLocalPort, MSGCallBack DataCallback, void *pUserData)
 {
+    if (IsLoad)
+    {
+        return -1;
+    }
 
     if(fun_NET_DVR_StartListen_V30)
     {
@@ -114,6 +144,10 @@ long Alarm_HC::M_NET_DVR_StartListen_V30(char *sLocalIP, WORD wLocalPort, MSGCal
 
 bool Alarm_HC::M_NET_DVR_Logout_V30(LONG lUserID)
 {
+    if (IsLoad)
+    {
+        return false;
+    }
 
     if(fun_NET_DVR_Logout_V30)
     {
@@ -127,6 +161,10 @@ bool Alarm_HC::M_NET_DVR_Logout_V30(LONG lUserID)
 
 bool Alarm_HC::M_NET_DVR_StopListen_V30(LONG lListenHandle)
 {
+    if (IsLoad)
+    {
+        return false;
+    }
 
     if(fun_NET_DVR_StopListen_V30)
     {

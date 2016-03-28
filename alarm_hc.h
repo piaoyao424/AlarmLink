@@ -57,6 +57,7 @@ public:
 
 private:
         QWidget *parent ;
+        bool   IsLoad;
 };
 
 #endif // ALARM_HC_H

@@ -7,5 +7,6 @@
 #include <QDebug>
 #include <qdir.h>
 #include <QMessageBox>
+#include <ActiveQt/QAxWidget>
 
 #endif // STABLE_H
