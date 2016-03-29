@@ -4,8 +4,13 @@ Alarm_HC::Alarm_HC(QWidget *parent)
 {
     this->parent = parent;
     IsLoad = false ;
-    QLibrary HCDLL("HCNetSDK.dll");
-    if(HCDLL.load())
+
+    QString strfile = QCoreApplication::applicationDirPath() + "/HCNetSDK.dll";
+    qDebug()<<strfile;
+
+    QLibrary HCDLL(strfile);
+
+    if(!HCDLL.load())
     {
         QMessageBox::information(this->parent,"error","报警主机DLL加载失败！" + HCDLL.errorString() );
     }
@@ -26,7 +31,7 @@ Alarm_HC::Alarm_HC(QWidget *parent)
 
 bool Alarm_HC::M_NET_DVR_Init()
 {
-    if (IsLoad)
+    if (!IsLoad)
     {
         return false;
     }
@@ -43,7 +48,7 @@ bool Alarm_HC::M_NET_DVR_Init()
 
 bool Alarm_HC::M_NET_DVR_Cleanup()
 {
-    if (IsLoad)
+    if (!IsLoad)
     {
         return false;
     }
@@ -59,7 +64,7 @@ bool Alarm_HC::M_NET_DVR_Cleanup()
 
 bool Alarm_HC::M_NET_DVR_SetConnectTime(DWORD dwWaitTime, DWORD dwTryTimes)
 {
-    if (IsLoad)
+    if (!IsLoad)
     {
         return false;
     }
@@ -76,7 +81,7 @@ bool Alarm_HC::M_NET_DVR_SetConnectTime(DWORD dwWaitTime, DWORD dwTryTimes)
 
 bool Alarm_HC::M_NET_DVR_SetReconnect(DWORD dwInterval, WINBOOL bEnableRecon)
 {
-    if (IsLoad)
+    if (!IsLoad)
     {
         return false;
     }
@@ -93,7 +98,7 @@ bool Alarm_HC::M_NET_DVR_SetReconnect(DWORD dwInterval, WINBOOL bEnableRecon)
 
 long Alarm_HC::M_NET_DVR_Login_V30(char *sDVRIP, WORD wDVRPort, char *sUserName, char *sPassword, LPNET_DVR_DEVICEINFO_V30 lpDeviceInfo)
 {
-    if (IsLoad)
+    if (!IsLoad)
     {
         return -1;
     }
@@ -110,7 +115,7 @@ long Alarm_HC::M_NET_DVR_Login_V30(char *sDVRIP, WORD wDVRPort, char *sUserName,
 
 bool Alarm_HC::M_NET_DVR_SetDVRMessageCallBack_V30(MSGCallBack fMessageCallBack, void *pUser)
 {
-    if (IsLoad)
+    if (!IsLoad)
     {
         return false;
     }
@@ -127,7 +132,7 @@ bool Alarm_HC::M_NET_DVR_SetDVRMessageCallBack_V30(MSGCallBack fMessageCallBack,
 
 long Alarm_HC::M_NET_DVR_StartListen_V30(char *sLocalIP, WORD wLocalPort, MSGCallBack DataCallback, void *pUserData)
 {
-    if (IsLoad)
+    if (!IsLoad)
     {
         return -1;
     }
@@ -144,7 +149,7 @@ long Alarm_HC::M_NET_DVR_StartListen_V30(char *sLocalIP, WORD wLocalPort, MSGCal
 
 bool Alarm_HC::M_NET_DVR_Logout_V30(LONG lUserID)
 {
-    if (IsLoad)
+    if (!IsLoad)
     {
         return false;
     }
@@ -161,7 +166,7 @@ bool Alarm_HC::M_NET_DVR_Logout_V30(LONG lUserID)
 
 bool Alarm_HC::M_NET_DVR_StopListen_V30(LONG lListenHandle)
 {
-    if (IsLoad)
+    if (!IsLoad)
     {
         return false;
     }

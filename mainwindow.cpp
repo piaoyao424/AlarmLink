@@ -27,21 +27,20 @@ MainWindow::MainWindow(QWidget *parent) :
 
     Alarm_HC alarm = Alarm_HC(this);
     tts->speak("报警主机初始化失败！");
-    QTime t;
-    t.start();
-    while(t.elapsed()<2000)
-    QCoreApplication::processEvents();
+//    //等待2000ms
+//    QTime t;
+//    t.start();
+//    while(t.elapsed()<2000)
+//    QCoreApplication::processEvents();
 
 
     if(alarm.M_NET_DVR_Init())
     {
-        AddLog("报警主机初始化完成！");
-        tts->speak("报警主机初始化完成！");
+        AddLog("报警主机初始化完成！");      
     }
     else
     {
         AddLog("报警主机初始化失败！");
-        tts->speak("报警主机初始化失败！");
     }
 }
 
